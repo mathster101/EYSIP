@@ -1,7 +1,7 @@
 import numpy as np
 import tqdm
 from config import *
-import matplotlib.pyplot as plt
+
 def load_data(PATH):
    a = np.load(PATH + 'x_train.npy') #load train Xs
    b = np.load(PATH + 'y_train.npy') #load train Ys

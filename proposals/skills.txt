@@ -1,0 +1,23 @@
+C++
+Python
+Java
+Computer Vision
+Image Processing
+Machine Learning
+NLP
+Neural Networks
+Web Design
+Tensorflow
+Unity
+Android App
+AVR
+Embedded_C
+ROS
+Gazebo
+Arduino
+ESP8266
+ESP32
+IOT
+CAD
+Sensor
+Raspberry Pi

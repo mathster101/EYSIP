@@ -1,0 +1,53 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat May 16 00:13:48 2020
+
+@author: Mathew
+"""
+
+
+import numpy as np 
+import pandas as pd
+import matplotlib.pyplot as plt
+from keras.preprocessing.text import Tokenizer
+from keras.preprocessing.sequence import pad_sequences
+from keras.models import Sequential
+from keras.layers import Dense, Embedding, LSTM, SpatialDropout1D, Bidirectional
+from sklearn.model_selection import train_test_split
+from keras.utils.np_utils import to_categorical
+from keras.callbacks import EarlyStopping
+from keras.layers import Dropout
+from keras.callbacks import ModelCheckpoint
+from config import *
+
+def build_model():# builds the model and returns it
+   model = Sequential() #defining the model
+   model.add(Embedding(MAX_NB_WORDS, EMBEDDING_DIM, input_length=120))
+   model.add(SpatialDropout1D(0.2))
+   model.add(Bidirectional(LSTM(200, dropout=0.2, recurrent_dropout=0.2)))
+   model.add(Dense(5, activation='softmax'))
+   try:
+      model.load_weights(PATH + "weights_balanced.best.hdf5")
+   except:
+      pass
+      
+   model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+   print(model.summary())
+   return model
+
+def load_data(PATH):
+   a = np.load(PATH + 'x_balance.npy') #load train Xs
+   b = np.load(PATH + 'y_balance.npy') #load train Ys
+   
+   return a,b
+
+X_train, Y_tr = load_data(PATH)
+
+Y_train = np.asarray([np.identity(5)[x-1] for x in Y_tr])
+
+checkpoint = ModelCheckpoint(PATH + "weights_balanced.best.hdf5", monitor='val_accuracy', verbose=1, save_best_only=True, mode='max') #checkpointing it
+callbacks_list = [checkpoint,EarlyStopping(monitor='val_loss', patience=3, min_delta=0.0001)]
+
+current_model = build_model() #build model
+
+history = current_model.fit(X_train, Y_train, epochs=EPOCHS, batch_size=BATCH_SIZE,validation_split=VALID_SPLIT,callbacks=callbacks_list)  #train time

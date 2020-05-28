@@ -1,0 +1,10 @@
+9-5-2020
+find out -> precision and recall
+	confusion matrix
+	tf and idf
+	read paper on categorization
+	2 nlp
+	8 knn andrew ng
+	1 rnn andrew
+make -> google docs folder
+	google form for eyantra mentors (they rate themselves from 1-5)

@@ -1,0 +1,12 @@
+find out:
+word embeddings
+bias and variance
+null hypothesis
+type1,2 errors
+correlation
+auc,roc curve
+no free lunch theorem
+start reading the paper
+
+make:
+implement kmeans on a document

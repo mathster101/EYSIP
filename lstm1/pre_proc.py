@@ -21,8 +21,8 @@ PATH = '../../Datasets/lstm1/'
 
 
 topics = ['electronics']
-SAVE_CSV = 1
-SAVE_NPY = 1
+SAVE_CSV = 0
+SAVE_NPY = 0
 
 def clean_text (s, stp_wrd):
    s = s.lower()

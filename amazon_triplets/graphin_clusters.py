@@ -18,7 +18,7 @@ neuralcoref.add_to_pipe(nlp)
 
 PATH = '../../Datasets/lstm2/'
 topics = ['electronics', 'home', 'pets', 'clothing', 'toys']
-VAL_PER_TOPIC= 20
+VAL_PER_TOPIC = 20
 NUM_CLUSTERS = 5
 
 def fetch_data(PATH,topics):
@@ -28,7 +28,7 @@ def fetch_data(PATH,topics):
       count = 1
       for line in open(PATH + val + '.json','r'):
          raw.append([json.loads(line),val])
-         count+=1
+         count += 1
          if count>VAL_PER_TOPIC:
             break
    return raw
@@ -83,8 +83,7 @@ sentences = splitter(text)
 del text, raw, topics
 triplets = trip_gen(sentences)
 #%%
-x,y,X = get2d(triplets,2)
-
+x, y, X = get2d(triplets,2)
 plt.scatter(x,y)
 plt.show()
 #%%

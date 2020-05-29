@@ -1,4 +1,4 @@
-C++:c++
+C/C++:c/c++,c,c++
 Python:python
 Java:java
 Computer Vision:opencv,image
@@ -13,6 +13,6 @@ Gazebo:gazebo
 Arduino/ESPseries:micro,controller,arduino,esp8266,esp,esp32,avr,embedded
 IOT:cloud,iot,server,internet
 CAD:cad
-Sensor:sensor,data,gps,scanner,biometric,sensors
+Sensors:sensor,data,gps,scanner,biometric,sensors
 Raspberry Pi:raspberry,raspberry pi,pi
 Robotics:robot,bot,motor,arduino,circuit,drone,uav,quad,hardware

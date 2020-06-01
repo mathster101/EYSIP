@@ -31,7 +31,7 @@ def build_model():# builds the model and returns it
       print('pre trained weights not found!')
       
    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-   #print(model.summary())
+   print(model.summary())
    return model
 
 def load_data(PATH):

@@ -7,12 +7,24 @@ Created on Thu May 28 21:00:56 2020
 from gensim.summarization import keywords
 import string
 import re
-import tqdm
+import numpy as np
 from mentorskills import *
 PATH = 'D:\Documents\Datasets\proposals\proposals.csv'
 #PATH = 'resolved.txt'
 
+def Sort_mentors(sub_li): 
+  
+    # reverse = None (Sorts in Ascending order) 
+    # key is set to sort using second element of  
+    # sublist lambda has been used 
+    return(sorted(sub_li, key = lambda x: len(x[1])))
 
+def Sort_skills(sub_li): 
+  
+    # reverse = None (Sorts in Ascending order) 
+    # key is set to sort using second element of  
+    # sublist lambda has been used 
+    return(sorted(sub_li, key = lambda x: x[0]))
 
 def get_data(PATH):
    f = open(PATH,'r',encoding="utf-8")
@@ -76,22 +88,68 @@ def match_proposals(converted,proposal_skills,matches):
       return_list.append([n,res])
    return return_list
          
-def wrapper(PATH,PATH_MENTOR_SKILLS,results):       
+
+#assigned,proposals= wrapper(PATH,PATH_MENTOR_SKILLS,3)
+def alt_match(mentor_skills,proposal_skills,l):
+   return_dict = {}
+   temp = []
+   for i in range(len(proposal_skills)):
+      temp.append([proposal_skills[i],i])
+   proposal_skills = temp
+   del temp
+   #print(proposal_skills)
+   num_mentor = len(mentor_skills)
+   prop_per_ment = int(len(proposal_skills)/num_mentor)
+   mentor_skills = Sort_mentors(mentor_skills)
+
+   m_c = -1
+   for m in mentor_skills: # pick a mentor
+      m_c += 1
+      name = m[0]
+      m_s = set(m[1]) #mentor's skills
+      matches = []
+      for j in range(len(proposal_skills)):
+         p_s = set(proposal_skills[j][0])
+         common_s = list(m_s & p_s)
+         matches.append([len(common_s)/(len(p_s)+1),proposal_skills[j][1]])
+      #matches now hold the relevance wrt to each proposal + global index
+      matches = Sort_skills(matches)
+      if l[m_c] == -1:
+         prop_per_ment = int(len(proposal_skills)/(num_mentor-m_c))
+      else:
+         prop_per_ment = int(l[m_c])
+      allocated = matches[-1*prop_per_ment:]
+      allocated = [x[1] for x in allocated]
+      return_dict[name] = allocated
+      for a in allocated:
+         temp =[]
+         for j in range(len(proposal_skills)):
+            if proposal_skills[j][1] != a:
+               temp.append(proposal_skills[j])
+         proposal_skills = temp
+   keys = list(return_dict.keys())[::-1]
+   for i in range(len(proposal_skills)):
+      return_dict[keys[i]].append(proposal_skills.pop(0)[1])
+   #print(proposal_skills)
+   return return_dict        
+            
+def wrapper(PATH,PATH_MENTOR_SKILLS,l):       
    proposals,skills = get_data(PATH)
    proposal_skills = skill_search(proposals,skills)
    mentor_data = read_skills(PATH_MENTOR_SKILLS)
    mentor_data_cleaned = eliminate_skills(mentor_data)
    temp = convert2std(mentor_data_cleaned,skills)
-   final = match_proposals(temp,proposal_skills,results)
-   return final,proposals
-
-assigned,proposals= wrapper(PATH,PATH_MENTOR_SKILLS,3)
-   
-
+   #final = match_proposals(temp,proposal_skills,results)
+   final = alt_match(temp,proposal_skills,l)
+   return final,proposals      
+         
+l = [-1 for x in range(19)]
+l[3] = 22   
+final,proposals =  wrapper(PATH,PATH_MENTOR_SKILLS,l)
 
 #proposals,skills = get_data(PATH)
 #proposal_skills = skill_search(proposals,skills)
 #mentor_data = read_skills(PATH_MENTOR_SKILLS)
 #mentor_data_cleaned = eliminate_skills(mentor_data)
 #temp = convert2std(mentor_data_cleaned,skills)
-#final = match_proposals(temp,proposal_skills,3)
+#final = alt_match(temp,proposal_skills)
